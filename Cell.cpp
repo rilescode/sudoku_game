@@ -1,7 +1,6 @@
 #include <iostream>
 #include "Cell.h"
 
-
 Cell::Cell(){
     containsValue = false;
 }

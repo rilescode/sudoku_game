@@ -10,8 +10,9 @@ class Board{
     private:
 
         // need 2d vector of cells
+        int boardSize;
         vector<vector<Cell>> cells;
-        void solveGiven();
+        void solveGiven(vector<vector<Cell>>);
         bool solveRecursive(vector<vector<Cell>>, int row, int col);
         //void solveWithBackTracking(int, int, vector<int>);
         bool isSafeValue(vector<vector<Cell>> recurseCells, int row, int col, int value);
@@ -22,7 +23,7 @@ class Board{
         int unsolvedCells;
         
     public:
-        Board();
+        Board(int size);
         //Board(int[][]);
         void setCell(int x, int y, int val);
         Cell getCell(int x, int y);

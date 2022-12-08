@@ -2,7 +2,6 @@
 #define CELL_H
 #include <iostream>
 
-
 class Cell{
     private:
         int val;

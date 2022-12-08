@@ -2,13 +2,13 @@
 #include "Board.h"
 
 using namespace std;
-Board::Board()
+Board::Board(int size): boardSize(size)
 {
     // init 2d vector of empty cells
-    for (int i = 0; i < 9; i++)
+    for (int i = 0; i < boardSize; i++)
     {
         cells.push_back(vector<Cell>());
-        for (int j = 0; j < 9; j++)
+        for (int j = 0; j < boardSize; j++)
         {
             cells.at(i).push_back(Cell(0));
             unsolvedCells++;
@@ -17,8 +17,8 @@ Board::Board()
 }
 
 // Board::Board(int boardVals[][]){
-//     for(int i = 0; i < 9; i++){
-//         for(int j = 0; j<9; j++){
+//     for(int i = 0; i < boardSize; i++){
+//         for(int j = 0; j<boardSize; j++){
 //             setCell(i, j, boardVals[i][j]);
 //         }
 //     }
@@ -47,9 +47,9 @@ Cell Board::getCell(int x, int y)
 
 void Board::toString()
 {
-    for (int i = 0; i < 9; i++)
+    for (int i = 0; i < boardSize; i++)
     {
-        for (int j = 0; j < 9; j++)
+        for (int j = 0; j < boardSize; j++)
         {
             std::cout << getCell(i, j).getValue() << " ";
         }
@@ -60,19 +60,19 @@ void Board::toString()
 void Board::solve()
 {
     // first need to input all values that can be solved
+    // this operation is faster than recursing
+    solveGiven(cells);
+    std::cout << "after solving given: \n";
+    toString();
 
-    //solveGiven();
-    
-    //vector<vector<int>> recurseCells = cells;
     // then need to use backtracking to solve the remaining values
-    //solveRecursive(cells, 0, 0);
     if(!solveRecursive(cells, 0, 0)){
          cout << "NO SOLUTION" << endl;
     }
 
 }
-/*
-void Board::solveGiven()
+
+void Board::solveGiven(vector<vector<Cell>> theCells)
 {
     // while true
     // for each value in the grid
@@ -87,39 +87,40 @@ void Board::solveGiven()
     {
         loopcount++;
         insertedVals = false;
-        for (int row = 0; row < 9; row++)
+        for (int row = 0; row < boardSize; row++)
         {
-            for (int col = 0; col < 9; col++)
+            for (int col = 0; col < boardSize; col++)
             {
-                if (!getCell(row, col).hasValue())
+                if (!theCells.at(row).at(col).hasValue())
                 {
                     Cell curCell;
-                    vector<int> potentialValues = getPotentialValues(row, col);
+                    vector<int> potentialValues = getPotentialValues(theCells, row, col);
 
 
                     // if potentials.size = 1
                     if (potentialValues.size() == 1)
                     {
-                        setCell(row, col, potentialValues[0]);
+                        theCells.at(row).at(col).setValue(potentialValues[0]);
                         insertedVals = true;
                     }
                 }
             }
         }
     }
+    cells = theCells;
 }
-*/
+
 
 bool Board::solveRecursive(vector<vector<Cell>> recurseCells, int row, int col)
 {
     cells = recurseCells;
     //this will print out the whole board
-    if (row == 8 && col == 9){
+    if (row == boardSize - 1 && col == boardSize){
         return true;
 
     }
         
-    if(col == 9){
+    if(col == boardSize){
         row++;
         col=0;
     }
@@ -129,7 +130,7 @@ bool Board::solveRecursive(vector<vector<Cell>> recurseCells, int row, int col)
         return solveRecursive(recurseCells, row, col+1);
     }
 
-    for(int val = 1; val <= 9; val++){
+    for(int val = 1; val <= boardSize; val++){
         if(isSafeValue(recurseCells, row, col, val)){
             recurseCells.at(row).at(col).setValue(val);
 
@@ -147,9 +148,9 @@ bool Board::solveRecursive(vector<vector<Cell>> recurseCells, int row, int col)
         recurseCells.at(row).at(col).setValue(curPotentials.at(i));
 
         //print out current state of board
-        for (int i = 0; i < 9; i++)
+        for (int i = 0; i < boardSize; i++)
         {
-            for (int j = 0; j < 9; j++)
+            for (int j = 0; j < boardSize; j++)
             {
                 std::cout << recurseCells.at(i).at(j).getValue() << " ";
             }
@@ -166,8 +167,8 @@ bool Board::solveRecursive(vector<vector<Cell>> recurseCells, int row, int col)
 
     /*
     This is my old code using a for loop
-    for(int row = 0; row < 9; row++){
-        for(int col = 0; col < 9; col++){
+    for(int row = 0; row < boardSize; row++){
+        for(int col = 0; col < boardSize; col++){
             if(cells.at(row).at(col).getValue() == 0){
                 vector<int> curPotentials = getPotentialValues(row, col);
                 
@@ -185,7 +186,7 @@ bool Board::solveRecursive(vector<vector<Cell>> recurseCells, int row, int col)
                 }
                 
             }
-            if(row == 8 && col == 8){
+            if(row == boardSize - 1 && col == boardSize - 1){
                 return true;
             }
         }
@@ -227,8 +228,8 @@ vector<int> Board::getPotentialValues(vector<vector<Cell>> theCells, int row, in
 
     vector<int> potentialValues;
 
-    // for num 1-9
-    for (int num = 1; num < 10; num++)
+    // for num 1-boardSize
+    for (int num = 1; num < boardSize+1; num++)
     {
         // if !set.contains(num)
         if (find(combined_values.begin(), combined_values.end(), num) == combined_values.end())
@@ -243,7 +244,7 @@ vector<int> Board::getRowVals(vector<vector<Cell>> theCells, int row)
 {
     vector<int> rowVals;
     Cell curCell;
-    for (int curCol = 0; curCol < 9; curCol++)
+    for (int curCol = 0; curCol < boardSize; curCol++)
     {
         curCell = theCells.at(row).at(curCol);
         if (curCell.hasValue())
@@ -258,7 +259,7 @@ vector<int> Board::getColVals(vector<vector<Cell>> theCells, int col)
 {
     vector<int> colVals;
     Cell curCell;
-    for (int curRow = 0; curRow < 9; curRow++)
+    for (int curRow = 0; curRow < boardSize; curRow++)
     {
         curCell = theCells.at(curRow).at(col);
         if (curCell.hasValue())

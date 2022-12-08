@@ -22,7 +22,7 @@ int main (int argc, char **argv){
     std::cout << "cellVal " << c2.getValue() << std::endl;
 
     std::cout << "address of number: " << &number << std::endl;
-    Board b1 = Board();
+    Board b1 = Board(9);
 
     int boardVals[9][9]= 
     {
