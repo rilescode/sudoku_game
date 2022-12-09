@@ -6,7 +6,7 @@ class Cell{
     private:
         int val;
         bool containsValue;
-        
+
     public:
         Cell();
         Cell(int);

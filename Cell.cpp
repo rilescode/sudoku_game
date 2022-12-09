@@ -1,5 +1,5 @@
 #include <iostream>
-#include "Cell.h"
+#include "cell.h"
 
 Cell::Cell(){
     containsValue = false;

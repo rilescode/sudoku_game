@@ -1,5 +1,5 @@
 #include <iostream>
-#include "Board.h"
+#include "board.h"
 
 using namespace std;
 Board::Board(int size): boardSize(size)
@@ -37,7 +37,7 @@ void Board::setCell(int x, int y, int val)
         }
     }
     cells.at(x).at(y).setValue(val);
-    
+
 }
 
 Cell Board::getCell(int x, int y)
@@ -119,7 +119,7 @@ bool Board::solveRecursive(vector<vector<Cell>> recurseCells, int row, int col)
         return true;
 
     }
-        
+
     if(col == boardSize){
         row++;
         col=0;
@@ -140,7 +140,7 @@ bool Board::solveRecursive(vector<vector<Cell>> recurseCells, int row, int col)
         }
 
     }
-    
+
     /*
     old code not working:
     vector<int> curPotentials = getPotentialValues(row, col);
@@ -171,7 +171,7 @@ bool Board::solveRecursive(vector<vector<Cell>> recurseCells, int row, int col)
         for(int col = 0; col < boardSize; col++){
             if(cells.at(row).at(col).getValue() == 0){
                 vector<int> curPotentials = getPotentialValues(row, col);
-                
+
                 if(curPotentials.size()>0){
                     for(int i: curPotentials){
                         recurseCells.at(row).at(col).setValue(i);
@@ -184,7 +184,7 @@ bool Board::solveRecursive(vector<vector<Cell>> recurseCells, int row, int col)
                     recurseCells.at(row).at(col).setValue(0);
                     return false;
                 }
-                
+
             }
             if(row == boardSize - 1 && col == boardSize - 1){
                 return true;
@@ -201,7 +201,7 @@ bool Board::solveRecursive(vector<vector<Cell>> recurseCells, int row, int col)
 }
 
 bool Board::isSafeValue(vector<vector<Cell>> recurseCells, int row, int col, int value){
-    
+
     vector<int> potentialVals = getPotentialValues(recurseCells, row, col);
     // return whether this value is in the potential values
     return(std::find(potentialVals.begin(), potentialVals.end(), value) != potentialVals.end());

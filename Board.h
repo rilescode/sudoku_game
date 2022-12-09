@@ -2,7 +2,7 @@
 #define BOARD_H
 #include <iostream>
 #include <vector>
-#include "Cell.h"
+#include "cell.h"
 
 
 using namespace std;
@@ -21,7 +21,7 @@ class Board{
         vector<int> getRowVals(vector<vector<Cell>>, int row);
         vector<int> getColVals(vector<vector<Cell>>, int col);
         int unsolvedCells;
-        
+
     public:
         Board(int size);
         //Board(int[][]);
