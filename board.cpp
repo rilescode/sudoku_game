@@ -1,9 +1,16 @@
+#include <cmath>
 #include <iostream>
 #include "board.h"
+#include <stdexcept>
 
 using namespace std;
 Board::Board(int size): boardSize(size)
 {
+    subgridSize = sqrt(size);
+    if(subgridSize*subgridSize != size){
+        throw std::invalid_argument("Board size must be a perfect square");
+    }
+
     // init 2d vector of empty cells
     for (int i = 0; i < boardSize; i++)
     {
@@ -214,11 +221,11 @@ vector<int> Board::getPotentialValues(vector<vector<Cell>> theCells, int row, in
     // populate colVals
     vector<int> colVals = getColVals(theCells, col);
 
-    // iterate through 3x3 subgrid and populate subgridVals
+    // iterate through subgridSizexsubgridSize subgrid and populate subgridVals
     vector<int> subgridVals = getSubgridVals(theCells, row, col);
 
     // now we can make a list of potential values for this cell
-    // combine these 3 vectors into a set
+    // combine these vectors into a set
     // turn combined vector into set in order to get uyn
     vector<int> combined_values;
     combined_values.reserve( rowVals.size() + colVals.size() + subgridVals.size());
@@ -274,11 +281,11 @@ vector<int> Board::getSubgridVals(vector<vector<Cell>> theCells, int row, int co
 {
     vector<int> subgridVals;
     Cell curCell;
-    int subgridRowVal = row - (row % 3);
-    int subgridColVal = col - (col % 3);
-    for (int subgridRow = 0; subgridRow < 3; subgridRow++)
+    int subgridRowVal = row - (row % subgridSize);
+    int subgridColVal = col - (col % subgridSize);
+    for (int subgridRow = 0; subgridRow < subgridSize; subgridRow++)
     {
-        for (int subgridCol = 0; subgridCol < 3; subgridCol++)
+        for (int subgridCol = 0; subgridCol < subgridSize; subgridCol++)
         {
             curCell = theCells.at(subgridRowVal + subgridRow).at(subgridColVal + subgridCol);
             if (curCell.hasValue())

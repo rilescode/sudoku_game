@@ -11,6 +11,7 @@ class Board{
 
         // need 2d vector of cells
         int boardSize;
+        int subgridSize;
         vector<vector<Cell>> cells;
         void solveGiven(vector<vector<Cell>>);
         bool solveRecursive(vector<vector<Cell>>, int row, int col);

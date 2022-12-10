@@ -18,5 +18,10 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    const int baseBoardX = 50;
+    const int baseBoardY = 50;
+    int boardSize = 9;
+    const int textBoxSpacing = 50;
+    const int textBoxSize = 25;
 };
 #endif // MAINWINDOW_H
